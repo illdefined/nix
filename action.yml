@@ -10,7 +10,13 @@ runs:
         key: nix-eval-${{ hashFiles('**/flake.lock') || hashFiles('**/flake.nix') }}
         path: |
           ~/.cache/nix/eval-cache-*
-
+    
+    - name: Install QEMU user‐space emulator
+      if: runner.os == 'Linux' && runner.arch == 'X64'
+      shell: sh
+      run: |
+        sudo apt install qemu-user-binfmt
+    
     - name: Install Lix
       shell: sh
       run: |
