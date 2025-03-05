@@ -11,8 +11,14 @@ runs:
   steps:
     - name: Install QEMU user‐space emulator
       if: runner.os == 'Linux'
-      shell: sh
-      run: sudo apt install qemu-user-binfmt
+      shell: bash
+      run: |
+        pkgcache=/var/cache/apt/pkgcache.bin
+        if [[ ! -s $pkgcache || $(stat -c %Y $pkgcache) -lt $((EPOCHSECONDS - 86400)) ]]; then
+          sudo apt update
+        fi
+        
+        sudo apt install qemu-user-binfmt
     
     - name: Install Lix
       uses: DeterminateSystems/nix-installer-action@main
