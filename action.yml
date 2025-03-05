@@ -2,9 +2,23 @@ name: Lix installation
 description: Install Lix package manager
 
 inputs:
-  system:
-    required: true
-    description: Host system tuple
+  accept-flake-config:
+    description: Whether to accept Nix configuration from the nixConfig flake attribute, boolean value
+    default: 'true'
+
+  experimental-features:
+    description: List of additonal experimental Nix features to enable, separated by space
+
+  extra-platforms:
+    description: List of extra platforms to support, separated by space
+    default: ${{ runner.os == 'Linux' && 'riscv64-linux' || '' }}
+
+  fsync-metadata:
+    description: Whether to flush Nix store meta‐data synchronously, boolean value
+    default: 'false'
+
+  extra-config:
+    description: Extra lines to append to Nix configuration
 
 runs:
   using: composite
@@ -27,8 +41,9 @@ runs:
         logger: pretty
         diagnostic-endpoint: ''
         extra-conf: |
-          accept-flake-config = true
+          accept-flake-config = ${{ inputs.accept-flake-config }}
           experimental-features = nix-command flakes pipe-operator ca-derivations
-          substituters = https://cache.kyouma.net https://colmena.cachix.org https://catppuccin.cachix.org https://nix-community.cachix.org https://cache.nixos.org
-          trusted-public-keys = cache.kyouma.net:Frjwu4q1rnwE/MnSTmX9yx86GNA/z3p/oElGvucLiZg= colmena.cachix.org-1:7BzpDnjjH8ki2CT3f6GdOk7QAzPOl+1t3LvTLXqYcSg= catppuccin.cachix.org-1:noG/4HkbhJb+lUAdKrph6LaozJvAeEEZj4N732IysmU= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= 
-          extra-platforms = ${{ runner.os == 'Linux' && 'riscv64-linux' || '' }}
+          extra-experimental-features = ${{ inputs.experimental-features }}
+          extra-platforms = ${{ inputs.extra-platforms }}
+          fsync-metadata = ${{ inputs.fsync-metadata }}
+          ${{ inputs.extra-config }}
