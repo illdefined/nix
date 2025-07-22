@@ -42,7 +42,7 @@ runs:
         diagnostic-endpoint: ''
         extra-conf: |
           accept-flake-config = ${{ inputs.accept-flake-config }}
-          experimental-features = nix-command flakes pipe-operator ca-derivations
+          experimental-features = nix-command flakes pipe-operator
           extra-experimental-features = ${{ inputs.experimental-features }}
           extra-platforms = ${{ inputs.extra-platforms }}
           fsync-metadata = ${{ inputs.fsync-metadata }}
