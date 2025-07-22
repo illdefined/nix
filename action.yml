@@ -17,6 +17,9 @@ inputs:
     description: Whether to flush Nix store meta‐data synchronously, boolean value
     default: 'false'
 
+  github-token:
+    description: GitHub token for making authenticated requests
+
   extra-config:
     description: Extra lines to append to Nix configuration
 
@@ -38,6 +41,7 @@ runs:
       uses: DeterminateSystems/nix-installer-action@main
       with:
         source-url: 'https://install.lix.systems/lix/lix-installer-${{ fromJSON(''{"X64":"x86_64","ARM64":"aarch64"}'')[runner.arch] }}-${{ fromJSON(''{"Linux":"linux","macOS":"darwin","Windows":"windows"}'')[runner.os] }}'
+        github-token: ${{ inputs.github-token }}
         logger: pretty
         diagnostic-endpoint: ''
         extra-conf: |
