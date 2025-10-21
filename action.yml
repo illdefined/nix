@@ -51,3 +51,9 @@ runs:
           extra-platforms = ${{ inputs.extra-platforms }}
           fsync-metadata = ${{ inputs.fsync-metadata }}
           ${{ inputs.extra-config }}
+
+    - name: Enable GitHub Actions cache for build outputs
+      if: runner.os == 'Linux' || runner.os == 'macOS'
+      uses: DeterminateSystems/magic-nix-cache-action@main
+      with:
+        use-flakehub: false
